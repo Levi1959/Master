@@ -1,0 +1,6 @@
+﻿Dispositivo;Data;Hora ;Temperatura;Umidade;Umi. Max. (%);Umi. Min. (%);Pto Orvalho Ins. (C);Pto Orvalho Max. (C);Pto Orvalho Min. (C);Pressao Ins. (hPa);Pressao Max. (hPa);Pressao Min. (hPa);Vel. Vento (m/s);Dir. Vento (m/s);Raj. Vento (m/s);Radiacao (KJ/m²);Chuva (mm)
+INMET;11/10/2025;15:00;27.9;44.4;;;;;;;;;1,1;;;;0,0
+INMET;11/10/2025;16:00;28.8;40.8;;;;;;;;;0,9;;;;0,0
+INMET;11/10/2025;17:00;28.6;41.2;;;;;;;;;0,4;;;;0,0
+INMET;11/10/2025;18:00;28;43.2;;;;;;;;;0,1;;;;0,0
+Média do Horário ;;;28.325;42.4;;;;;;;;;;;;;
