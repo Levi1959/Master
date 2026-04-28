@@ -1,19 +1,19 @@
 import paho.mqtt.client as mqtt
 import time
-import json
 import os
 
 # Configurações MQTT
+#MQTT_SERVER = "vcn-20250910-1351"  # O broker está na nuvem
 MQTT_SERVER = "localhost"  # O broker está no mesmo Pi
 MQTT_PORT = 1883
 MQTT_USER = "user"
 MQTT_PASSWORD = "senha"
-TOPIC_MATO = "Mato_Temperatura"
-TOPIC_URBANO = "Urbano_Temperatura"
+TOPIC_MATO = "Mato_Temperatura_Local"
+TOPIC_URBANO = "Urbano_Temperatura_Local"
 
 # Nomes dos arquivos de saída
-FILENAME_MATO = "Mato_Temperatura.json"
-FILENAME_URBANO = "Urbano_Temperatura.json"
+FILENAME_MATO = "Mato_Temperatura_local.txt"
+FILENAME_URBANO = "Urbano_Temperatura_local.txt"
 
 def on_connect(client, userdata, flags, rc):
     """
@@ -28,33 +28,28 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     """
     Função chamada quando uma mensagem for recebida.
-    Decodifica a mensagem e salva em um arquivo JSON.
+    Decodifica a mensagem e salva em um arquivo de texto.
     """
     try:
-        # Decodifica a mensagem de bytes para string e converte para JSON
+        # Decodifica a mensagem de bytes para string
         payload_str = msg.payload.decode('utf-8')
-        dados = json.loads(payload_str)
         
-        # Adiciona o timestamp à leitura
-        dados['timestamp'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        
-        # Converte o objeto de volta para uma string JSON
-        json_line = json.dumps(dados) + '\n'
+        # Adiciona o timestamp à leitura no formato de texto
+        timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        linha_texto = f"[{timestamp}] {payload_str}\n"
 
         # Verifica o tópico e salva no arquivo correspondente
         if msg.topic == TOPIC_MATO:
             with open(FILENAME_MATO, "a") as file:
-                file.write(json_line)
-            print(f"Dados salvos em {FILENAME_MATO}: {json_line.strip()}")
+                file.write(linha_texto)
+            print(f"Dados salvos em {FILENAME_MATO}: {linha_texto.strip()}")
         elif msg.topic == TOPIC_URBANO:
             with open(FILENAME_URBANO, "a") as file:
-                file.write(json_line)
-            print(f"Dados salvos em {FILENAME_URBANO}: {json_line.strip()}")
+                file.write(linha_texto)
+            print(f"Dados salvos em {FILENAME_URBANO}: {linha_texto.strip()}")
         else:
             print(f"Mensagem recebida de um tópico não esperado: {msg.topic}")
             
-    except json.JSONDecodeError:
-        print(f"Erro ao decodificar JSON. Dados recebidos: {msg.payload}")
     except Exception as e:
         print(f"Ocorreu um erro: {e}")
 
